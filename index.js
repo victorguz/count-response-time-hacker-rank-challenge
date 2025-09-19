@@ -1,26 +1,9 @@
-'use strict';
-
-process.stdin.resume();
-process.stdin.setEncoding('utf-8');
-
-let inputString = '';
-let currentLine = 0;
-
-process.stdin.on('data', function(inputStdin) {
-    inputString += inputStdin;
-});
-
-process.stdin.on('end', function() {
-    inputString = inputString.split('\n');
-
-    main();
-});
-
-function readLine() {
-    return inputString[currentLine++];
+function average(previousElements) {
+  return (
+    previousElements.reduce((acc, val) => acc + val, 0) /
+    previousElements.length
+  );
 }
-
-
 
 /*
  * Complete the 'countResponseTimeRegressions' function below.
@@ -30,22 +13,26 @@ function readLine() {
  */
 
 function countResponseTimeRegressions(responseTimes) {
-    // Write your code here
-    const total = responseTimes.reduce((acc,val)=>acc+val,0);
-    return responseTimes;
+  // Write your code here
+  if (responseTimes.length <= 1) return 0;
+  let count = 0;
+  for (let i = 1; i < responseTimes.length; i++) {
+    const element = responseTimes[i];
+    const previousElements = responseTimes.slice(0, i);
+    const previousAvg = average(previousElements);
+    console.log(element, previousAvg,element > previousAvg);
+    if (element > previousAvg) {
+      count++;
+    }
+  }
+
+  return count;
 }
 
 function main() {
-    const responseTimesCount = parseInt(readLine().trim(), 10);
-
-    let responseTimes = [];
-
-    for (let i = 0; i < responseTimesCount; i++) {
-        const responseTimesItem = parseInt(readLine().trim(), 10);
-        responseTimes.push(responseTimesItem);
-    }
-
-    const result = countResponseTimeRegressions(responseTimes);
-
-    process.stdout.write(result + '\n');
+  const values = [4, 100, 200, 150, 300];
+  const result = countResponseTimeRegressions(values);
+  console.log(result);
 }
+
+main();
